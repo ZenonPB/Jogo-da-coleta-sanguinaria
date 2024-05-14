@@ -20,8 +20,7 @@ Fundo = pygame.image.load("Imagens/fundo.jpg")
 Fundo = pygame.transform.scale(Fundo,(800,600))
 
 
-obj_dball = Objects("Imagens/dball.png",75,75)
-obj_ki = Objects("Imagens/ki-blast.png",71.02,63.22)
+itens = Objects
 
 
 
@@ -50,12 +49,11 @@ while running == True:
 
     player.movements(pygame.K_a,pygame.K_d)
 
+    itens.render()
+    itens.movement()
 
-    #LOAD IMG
-    obj_dball.render(screen)
-    obj_dball.movement()
-    obj_ki.render(screen)
-    obj_ki.movement()
+
+
 
     pygame.display.update()
 
