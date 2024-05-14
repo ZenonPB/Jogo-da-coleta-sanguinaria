@@ -1,5 +1,5 @@
 import pygame
-class Jogador:
+class Player:
 
     #INFOS BASICAS PARA LOAD DO PERSONAGEM
     def __init__(self,img, img_x,img_y, pos_x, pos_y ):
