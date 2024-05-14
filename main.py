@@ -1,4 +1,5 @@
 from player import Player
+from obj import Objects
 import pygame, random
 
 pygame.init()
@@ -10,13 +11,18 @@ clock = pygame.time.Clock()
 
 pygame.display.set_caption("Jogo das gotas de sangue caindo do céu")
 
-
+in_screen = []
 
 
 #CARREGANDO IMAGENS JOGOS
 Fundo = pygame.image.load("Imagens/fundo.jpg")
 
 Fundo = pygame.transform.scale(Fundo,(800,600))
+
+
+obj_dball = Objects("Imagens/dball.png",75,75)
+obj_ki = Objects("Imagens/ki-blast.png",71.02,63.22)
+
 
 
 
@@ -45,6 +51,11 @@ while running == True:
     player.movements(pygame.K_a,pygame.K_d)
 
 
+    #LOAD IMG
+    obj_dball.render(screen)
+    obj_dball.movement()
+    obj_ki.render(screen)
+    obj_ki.movement()
 
     pygame.display.update()
 
