@@ -1,65 +1,70 @@
-from player import Player
-from obj import Objects
 import pygame, random
+from player import Player
+from obstaculos import Obstaculo
 
 pygame.init()
 
-#CONFIGURAÇÕES BASICAS JOGO
-screen = pygame.display.set_mode((800,600))
 
+#Configurações básicas do jogo
+tela = pygame.display.set_mode((800,500))
+pygame.display.set_caption("Jogo do ano 2024")
 clock = pygame.time.Clock()
 
-pygame.display.set_caption("Jogo das gotas de sangue caindo do céu")
 
-in_screen = []
+#Sprites
+jogador = Player("Imagens/goku.png", 100,100,100,375)
 
 
-#CARREGANDO IMAGENS JOGOS
+obstaculo = Obstaculo()
+
 Fundo = pygame.image.load("Imagens/fundo.jpg")
-
-Fundo = pygame.transform.scale(Fundo,(800,600))
-
-
-obj_dball = Objects("Imagens/dball.png",75,75)
-obj_ki = Objects("Imagens/ki-blast.png",71.02,63.22)
+Fundo = pygame.transform.scale(Fundo,(800,500))
 
 
+#Obstáculos
+obstaculos = []
 
 
-#PLAYER CONFIG
-player = Player("Imagens/goku.png",98.25,183,400,400)
+#O jogo rodando em si e configurações
+rodando = True
 
 
-#INGAME
-running = True
+#Faz ser possível quitar do jogo kkkkkk
+while rodando:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            rodando = False
 
-while running == True:
+    #Spawna os sprites e seus movimentos
+    tela.blit(Fundo,(0,0))
 
-    for event in pygame.event.get():
-
-        if event.type == pygame.QUIT:
-            
-            running = False
-
-
-    screen.blit(Fundo,(0,0))
-
-
-    #LOAD NO PLAYER
-    player.print_char(screen)
-
-    player.movements(pygame.K_a,pygame.K_d)
+    #PLAYER 1 CONFIG
+    jogador.print_char(tela)
+    jogador.movements(pygame.K_a, pygame.K_d)
 
 
-    #LOAD IMG
-    obj_dball.render(screen)
-    obj_dball.movement()
-    obj_ki.render(screen)
-    obj_ki.movement()
+
+    #OBSTACULOS
+    if len(obstaculos) <= 7:
+        novo_obstaculo = Obstaculo()  # Cria um novo obstáculo
+        obstaculos.append(novo_obstaculo)  # Adiciona à lista de obstáculos
+    for obstaculokk in obstaculos:
+        if obstaculokk.pos_y > 600:
+            obstaculos.remove(obstaculokk)
+    
+    # Atualiza e desenha os obstáculos
+    for obstaculokk in obstaculos:
+        obstaculokk.load(tela)
+        obstaculokk.movimenta()
+
+
+        # Posicao jogador e obstaculo
+        rel_x = jogador.pos_x - obstaculokk.pos_x
+        rel_y = jogador.pos_y - obstaculokk.pos_y
+
+        # COLISOES
+
 
     pygame.display.update()
 
-
     clock.tick(60)
-
-
