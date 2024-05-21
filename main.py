@@ -15,10 +15,23 @@ clock = pygame.time.Clock()
 jogador = Player("Imagens/goku.png", 100,100,100,375)
 
 
-obstaculo = Obstaculo()
 
 Fundo = pygame.image.load("Imagens/fundo.jpg")
 Fundo = pygame.transform.scale(Fundo,(800,500))
+
+
+
+#SOUND EFFECTS
+
+pygame.mixer.music.load("sounds/ost.mp3")
+pygame.mixer.music.set_endevent(pygame.USEREVENT)
+pygame.mixer.music.play()
+
+
+point_up = pygame.mixer.Sound("sounds/good_sound.mp3")
+
+point_down = pygame.mixer.Sound("sounds/bad_sound.mp3")
+
 
 
 #Obstáculos
@@ -52,17 +65,19 @@ while rodando:
         if obstaculokk.pos_y > 600:
             obstaculos.remove(obstaculokk)
     
+
     # Atualiza e desenha os obstáculos
     for obstaculokk in obstaculos:
         obstaculokk.load(tela)
         obstaculokk.movimenta()
+        if jogador.rect.colliderect(obstaculokk.rect):
+            if obstaculokk.sts_dball == 1:
+                point_up.play()
+                obstaculos.remove(obstaculokk)
+            elif obstaculokk.sts_ki == 1:
+                point_down.play()
+                obstaculos.remove(obstaculokk)
 
-
-        # Posicao jogador e obstaculo
-        rel_x = jogador.pos_x - obstaculokk.pos_x
-        rel_y = jogador.pos_y - obstaculokk.pos_y
-
-        # COLISOES
 
 
     pygame.display.update()

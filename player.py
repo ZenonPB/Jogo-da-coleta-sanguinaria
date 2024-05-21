@@ -15,6 +15,8 @@ class Player:
 
         self.mascara = pygame.mask.from_surface(self.imagem)
 
+        self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.height)
+
     #APARECER NA TELA KKKKKKK
     def print_char(self, screen):
         screen.blit(self.imagem,(self.pos_x,self.pos_y))
@@ -32,4 +34,5 @@ class Player:
             if self.pos_x < 800 - self.width:
                 self.pos_x = self.pos_x + 5
         
+    
 

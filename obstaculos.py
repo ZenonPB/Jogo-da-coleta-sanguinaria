@@ -2,13 +2,24 @@ import pygame, random
 
 class Obstaculo:
     def __init__(self):
+        self.points = 0
 
+        self.power = 3
+
+        self.sts_dball = 0
+
+        self.sts_ki = 0
+
+        self.rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.height)
+
+        
         if random.randint(0,1) == 0:
 
             self.img = pygame.image.load("Imagens/dball.png")
             self.mascara = pygame.mask.from_surface(self.img)
 
             self.sts_dball = 1
+
 
         else:
 
