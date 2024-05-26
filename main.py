@@ -38,7 +38,11 @@ power_sound = pygame.mixer.Sound("sounds/power_sound.mp3")
 #Obstáculos
 obstaculos = []
 
+#Pra tirar o bug chato insuportavel filho da puta de usar tudo de uma vez so
 poder_ativado = False
+
+#contagem de itens ruins que ele pegou
+itens_ki = 0
 
 #O jogo rodando em si 
 rodando = True
@@ -49,12 +53,14 @@ while rodando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             rodando = False
+
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_e and jogador.power > 0 and not poder_ativado:
                 jogador.power -= 1
                 power_sound.play()
                 obstaculos.clear()
                 poder_ativado = True
+
         elif evento.type == pygame.KEYUP:
             if evento.key == pygame.K_e:
                 poder_ativado = False
@@ -96,6 +102,9 @@ while rodando:
 
             else:
                 pontos -= 100
+                itens_ki +=1
+                if itens_ki >=3:
+                    rodando = False
                 if pontos < 0:
                     pontos = 0
                 point_down.play()
