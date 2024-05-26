@@ -9,7 +9,7 @@ pygame.init()
 tela = pygame.display.set_mode((800,500))
 pygame.display.set_caption("Jogo do ano 2024")
 clock = pygame.time.Clock()
-
+pontos = 0
 
 #Sprites
 jogador = Player("Imagens/goku.png", 100,100,100,375)
@@ -32,13 +32,15 @@ point_up = pygame.mixer.Sound("sounds/good_sound.mp3")
 
 point_down = pygame.mixer.Sound("sounds/bad_sound.mp3")
 
+power_sound = pygame.mixer.Sound("sounds/power_sound.mp3")
 
 
 #Obstáculos
 obstaculos = []
 
+poder_ativado = False
 
-#O jogo rodando em si e configurações
+#O jogo rodando em si 
 rodando = True
 
 
@@ -47,9 +49,23 @@ while rodando:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             rodando = False
+        elif evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_e and jogador.power > 0 and not poder_ativado:
+                jogador.power -= 1
+                power_sound.play()
+                obstaculos.clear()
+                poder_ativado = True
+        elif evento.type == pygame.KEYUP:
+            if evento.key == pygame.K_e:
+                poder_ativado = False
 
     #Spawna os sprites e seus movimentos
     tela.blit(Fundo,(0,0))
+
+    #PONTUAÇÃO
+    font = pygame.font.SysFont("Comic Sans MS",30, True, False)
+    pontuação = font.render(f"Poder de Luta: {pontos}",True,(232, 235, 52))
+    tela.blit(pontuação,(0,4))
 
     #PLAYER 1 CONFIG
     jogador.print_char(tela)
@@ -60,24 +76,30 @@ while rodando:
     #OBSTACULOS
     if len(obstaculos) <= 7:
         novo_obstaculo = Obstaculo()  # Cria um novo obstáculo
-        obstaculos.append(novo_obstaculo)  # Adiciona à lista de obstáculos
+        obstaculos.append(novo_obstaculo)  # Adiciona na lista de obstáculos
     for obstaculokk in obstaculos:
         if obstaculokk.pos_y > 600:
             obstaculos.remove(obstaculokk)
     
 
-    # Atualiza e desenha os obstáculos
-    for obstaculokk in obstaculos:
-        obstaculokk.load(tela)
-        obstaculokk.movimenta()
-        if jogador.rect.colliderect(obstaculokk.rect):
-            if obstaculokk.sts_dball == 1:
-                point_up.play()
-                obstaculos.remove(obstaculokk)
-            elif obstaculokk.sts_ki == 1:
-                point_down.play()
-                obstaculos.remove(obstaculokk)
+    # COLOCA OS OBSTACULOS NA TELA E CHECKA A COLISAO
+    for obstaculo in obstaculos:
+        obstaculo.load(tela)
+        obstaculo.movimenta()
 
+        rel_pos = (obstaculo.pos_x - jogador.pos_x, obstaculo.pos_y - jogador.pos_y)
+        if jogador.mascara.overlap(obstaculo.mascara, rel_pos):
+
+            if obstaculo.sts_dball == 1:
+                pontos += 100
+                point_up.play()
+
+            else:
+                pontos -= 100
+                if pontos < 0:
+                    pontos = 0
+                point_down.play()
+            obstaculos.remove(obstaculo)
 
 
     pygame.display.update()
